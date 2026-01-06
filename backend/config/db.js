@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
-const dbUser = ''
-const dbPassword = ''
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASS;
 
 
-const Conn = async () => {
+const conn = async () => {
      try{    
-            const dbConn = await mongoose.connect(`mongodb+srv://johnyramonvoss_db_user:<db_password>@cluster0.cchuj7t.mongodb.net/?appName=Cluster0`);
+            const dbConn = await mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.gkivpvg.mongodb.net/?appName=Cluster0`);
     
-        console.log("Conectado");
+        console.log("Conectado ao banco");
 
         return dbConn;
     } catch (error) {
@@ -16,6 +16,9 @@ const Conn = async () => {
         
 };
 
+conn()
+
+module.exports = conn;
 
 
 //Connection
