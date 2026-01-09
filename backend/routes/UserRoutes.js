@@ -1,14 +1,37 @@
-const express = requise("express");
+const express = require("express");
 const router = express.Router();
 
-//controller
-const {register} = requise("../controllers/USerController");
+// Controller
+const {
+  register,
+  getCurrentUser,
+  login,
+  update,
+  getUserById,
+} = require("../controllers/UserController");
 
-//middlewares
-const validate = requise("../middlewares/handleValidations")
+// Middlewares
+const validate = require("../middlewares/handleValidations");
+const {
+  userCreateValidation,
+  loginValidation,
+  userUpdateValidation,
+} = require("../middlewares/userValidations");
+const authGuard = require("../middlewares/authGuard");
+const { imageUpload } = require("../middlewares/imageUpload");
 
-
-//routes
-router.post("/register", validate, register);
+// Routes
+router.post("/register", userCreateValidation(), validate, register);
+router.get("/profile", authGuard, getCurrentUser);
+router.post("/login", loginValidation(), validate, login);
+router.put(
+  "/",
+  authGuard,
+  userUpdateValidation(),
+  validate,
+  imageUpload.single("profileImage"),
+  update
+);
+router.get("/:id", getUserById);
 
 module.exports = router;
